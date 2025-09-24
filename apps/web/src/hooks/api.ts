@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { habitApi, logApi, statsApi } from '../lib/api';
 import { formatDateForApi, getWeekStart } from '../lib/dates';
-import type { CreateHabitRequest, UpdateHabitRequest } from '../types/api';
+import type { UpdateHabitRequest } from '../types/api';
 
 // Query keys
 export const queryKeys = {

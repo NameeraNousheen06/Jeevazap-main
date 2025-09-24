@@ -8,14 +8,13 @@
     "server"
   ],
   "scripts": {
-    "dev": "concurrently \"pnpm run server:dev\" \"pnpm run web:dev\"",
-    "server:dev": "pnpm --filter server dev",
-    "web:dev": "pnpm --filter web dev",
-    "build": "pnpm --filter web build",
-    "start": "pnpm --filter server start"
+    "dev": "concurrently \"npm run server:dev\" \"npm run web:dev\"",
+    "server:dev": "cd server && npm run dev",
+    "web:dev": "cd apps/web && npm run dev",
+    "build": "cd apps/web && npm run build",
+    "start": "cd server && npm start"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
-  },
-
+  }
 }

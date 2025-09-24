@@ -1,5 +1,5 @@
 import { format, startOfWeek, addWeeks, subWeeks, parseISO } from 'date-fns';
-import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
+import { utcToZonedTime } from 'date-fns-tz';
 
 export const TIMEZONE = 'Asia/Kolkata';
 
