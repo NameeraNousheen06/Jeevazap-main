@@ -11,10 +11,11 @@
     "dev": "concurrently \"npm run server:dev\" \"npm run web:dev\"",
     "server:dev": "cd server && npm run dev",
     "web:dev": "cd apps/web && npm run dev",
-    "build": "npm run build:web",
+    "build": "npm run build:web && npm run copy:dist",
     "build:web": "cd apps/web && npm ci && npm run build",
+    "copy:dist": "xcopy /E /I /Y apps\\web\\dist dist",
     "start": "cd server && npm start",
-    "vercel-build": "npm run build:web"
+    "vercel-build": "npm run build"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
