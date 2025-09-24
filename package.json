@@ -1,0 +1,21 @@
+{
+  "name": "mini-habit-tracker",
+  "version": "1.0.0",
+  "description": "A minimal habit tracking MVP",
+  "private": true,
+  "workspaces": [
+    "apps/web",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently \"pnpm run server:dev\" \"pnpm run web:dev\"",
+    "server:dev": "pnpm --filter server dev",
+    "web:dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "start": "pnpm --filter server start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "packageManager": "pnpm@8.0.0"
+}

@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Habit {
+  id        String   @id @default(cuid())
+  name      String
+  color     String   @default("#22c55e") // fallback green
+  createdAt DateTime @default(now())
+  logs      HabitLog[]
+}
+
+model HabitLog {
+  id       String   @id @default(cuid())
+  habitId  String
+  date     DateTime // store at 00:00 local for the day
+  done     Boolean  @default(false)
+
+  habit    Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  @@unique([habitId, date]) // only one row per habit per day
+}
