@@ -28,7 +28,7 @@ export default function StatsCards({ stats, isLoading }: StatsCardsProps) {
           <div className="flex justify-between items-center">
             <span className="text-gray-600">Success Rate:</span>
             <span className="font-semibold text-2xl text-blue-600">
-              {stats.total.percent}%
+              {stats.total.percent.toFixed(1)}%
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
@@ -58,7 +58,7 @@ export default function StatsCards({ stats, isLoading }: StatsCardsProps) {
                     {habit.habitName}
                   </p>
                   <p className="text-xs text-gray-500">
-                    {habit.count}/7 days • {habit.percent}%
+                    {habit.count}/7 days • {habit.percent.toFixed(1)}%
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
