@@ -46,7 +46,7 @@ export default function HabitsGrid({ habits, logs, weekStart }: HabitsGridProps)
   };
 
   const handleDeleteHabit = async (habitId: string, habitName: string) => {
-    if (!confirm(`Are you sure you want to delete "${habitName}"? This action cannot be undone.`)) {
+    if (!confirm(`Remove "${habitName}" from your daily routine?\n\nThis will permanently delete the habit and all its progress. This action cannot be undone.`)) {
       return;
     }
 
@@ -55,7 +55,7 @@ export default function HabitsGrid({ habits, logs, weekStart }: HabitsGridProps)
       await deleteHabitMutation.mutateAsync(habitId);
     } catch (error) {
       console.error('Failed to delete habit:', error);
-      alert('Failed to delete habit. Please try again.');
+      alert('Failed to remove habit from your routine. Please try again.');
     } finally {
       setDeletingHabit('');
     }
@@ -119,13 +119,13 @@ export default function HabitsGrid({ habits, logs, weekStart }: HabitsGridProps)
                 <button
                   onClick={() => handleDeleteHabit(habit.id, habit.name)}
                   disabled={deletingHabit === habit.id}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-red-100 rounded text-red-500 hover:text-red-700 disabled:opacity-50"
-                  title="Delete habit"
+                  className="flex items-center justify-center w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Remove habit from daily routine"
                 >
                   {deletingHabit === habit.id ? (
                     <span className="animate-spin text-xs">⟳</span>
                   ) : (
-                    <span className="text-xs">🗑️</span>
+                    <span className="text-xs font-bold">×</span>
                   )}
                 </button>
               </div>
