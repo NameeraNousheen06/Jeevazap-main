@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { Habit, HabitLog } from '../types/api';
 import { getWeekDates, formatDateForApi, formatDayOfWeek, isFutureDate } from '../lib/dates';
-import { useToggleLog } from '../hooks/api';
+import { useToggleLog, useDeleteHabit } from '../hooks/api';
 
 interface HabitsGridProps {
   habits: Habit[];
@@ -11,8 +11,10 @@ interface HabitsGridProps {
 
 export default function HabitsGrid({ habits, logs, weekStart }: HabitsGridProps) {
   const toggleLogMutation = useToggleLog();
+  const deleteHabitMutation = useDeleteHabit();
   const weekDates = getWeekDates(weekStart);
   const [loading, setLoading] = useState<string>('');
+  const [deletingHabit, setDeletingHabit] = useState<string>('');
 
   // Create a map for quick log lookup
   const logMap = new Map<string, boolean>();
@@ -40,6 +42,22 @@ export default function HabitsGrid({ habits, logs, weekStart }: HabitsGridProps)
       console.error('Failed to toggle log:', error);
     } finally {
       setLoading('');
+    }
+  };
+
+  const handleDeleteHabit = async (habitId: string, habitName: string) => {
+    if (!confirm(`Are you sure you want to delete "${habitName}"? This action cannot be undone.`)) {
+      return;
+    }
+
+    setDeletingHabit(habitId);
+    try {
+      await deleteHabitMutation.mutateAsync(habitId);
+    } catch (error) {
+      console.error('Failed to delete habit:', error);
+      alert('Failed to delete habit. Please try again.');
+    } finally {
+      setDeletingHabit('');
     }
   };
 
@@ -88,14 +106,28 @@ export default function HabitsGrid({ habits, logs, weekStart }: HabitsGridProps)
           {habits.map((habit) => (
             <div key={habit.id} className="grid grid-cols-8 gap-2 items-center">
               {/* Habit name */}
-              <div className="flex items-center gap-2 py-2">
-                <div 
-                  className="w-3 h-3 rounded-full flex-shrink-0"
-                  style={{ backgroundColor: habit.color }}
-                />
-                <span className="text-sm font-medium text-gray-900 truncate">
-                  {habit.name}
-                </span>
+              <div className="flex items-center justify-between gap-2 py-2 group">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div 
+                    className="w-3 h-3 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: habit.color }}
+                  />
+                  <span className="text-sm font-medium text-gray-900 truncate">
+                    {habit.name}
+                  </span>
+                </div>
+                <button
+                  onClick={() => handleDeleteHabit(habit.id, habit.name)}
+                  disabled={deletingHabit === habit.id}
+                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-red-100 rounded text-red-500 hover:text-red-700 disabled:opacity-50"
+                  title="Delete habit"
+                >
+                  {deletingHabit === habit.id ? (
+                    <span className="animate-spin text-xs">⟳</span>
+                  ) : (
+                    <span className="text-xs">🗑️</span>
+                  )}
+                </button>
               </div>
 
               {/* Day cells */}
